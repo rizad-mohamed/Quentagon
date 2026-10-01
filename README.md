@@ -28,23 +28,25 @@
   <a href="https://github.com/rizad-mohamed/Quentagon/actions/workflows/ci.yml">CI Results</a>
 </p>
 
-Developed by **[Rizad Mohamed](https://github.com/rizad-mohamed)**.
+Co-founded by **[Rizad Mohamed](https://github.com/rizad-mohamed)** and **[Hirusha Nilupul](https://github.com/M-K-Hirusha)**.
+
+Website developed by **Rizad Mohamed**; Hirusha contributes as a collaborator in this repository.
 
 ---
 
 ## Project Status
 
-| Item                      | Current state                                                                 |
-| ------------------------- | ----------------------------------------------------------------------------- |
-| Public website            | [quentagon.com](https://quentagon.com/)                                       |
-| Original source           | [rizad-mohamed/Quentagon](https://github.com/rizad-mohamed/Quentagon), `main` |
-| Current deployment source | Separate `M-K-Hirusha/Quentagon` copy, `main`                                 |
-| Hosting                   | Hostinger Next.js deployment                                                  |
-| Application               | Public business website with browser interactions                             |
-| Contact                   | Email draft opened in the visitor's email application                         |
-| Client portal and bot     | Coming soon                                                                   |
+| Item                  | Current state                                                                 |
+| --------------------- | ----------------------------------------------------------------------------- |
+| Public website        | [quentagon.com](https://quentagon.com/)                                       |
+| Source repository     | [rizad-mohamed/Quentagon](https://github.com/rizad-mohamed/Quentagon), `main` |
+| Deployment source     | This repository: `rizad-mohamed/Quentagon`, `main`                            |
+| Hosting               | Hostinger Next.js deployment                                                  |
+| Application           | Public business website with browser interactions                             |
+| Contact               | Email draft opened in the visitor's email application                         |
+| Client portal and bot | Coming soon                                                                   |
 
-Changes to the original repository need to be brought into the connected deployment copy before they can reach the live website. The repositories do not automatically synchronize.
+Rizad's GitHub repository is connected directly to Hostinger. Both co-founders collaborate in this repository through branches and pull requests; reviewed changes merged into `main` are the source for website deployment.
 
 ---
 
@@ -69,7 +71,7 @@ Changes to the original repository need to be brought into the connected deploym
 - [Security Rules](#security-rules)
 - [Project Documentation](#project-documentation)
 - [Limitations](#limitations)
-- [Future Improvements](#future-improvements)
+- [Future Direction](#future-direction)
 - [Project Background](#project-background)
 - [Repository](#repository)
 - [License and Use](#license-and-use)
@@ -78,11 +80,11 @@ Changes to the original repository need to be brought into the connected deploym
 
 ## Project Overview
 
-Quentagon is a responsive technology studio website that presents services, project references, product previews and an interactive delivery process. It gives prospective clients a clear route from understanding the studio's capabilities to preparing a project enquiry.
+Quentagon currently serves as the company's official landing page, introducing its services, work, delivery process, founders and vision. The responsive website gives prospective clients a clear route from exploring the studio's capabilities to preparing a project enquiry.
 
-This is the original source repository: **[rizad-mohamed/Quentagon](https://github.com/rizad-mohamed/Quentagon)**.
+This is the shared source and deployment repository: **[rizad-mohamed/Quentagon](https://github.com/rizad-mohamed/Quentagon)**.
 
-The public website is available at **[quentagon.com](https://quentagon.com/)**. Its current Hostinger deployment uses the separate **M-K-Hirusha/Quentagon** copy on `main`. Updates to this original repository do not automatically sync into that deployment copy.
+The public website is available at **[quentagon.com](https://quentagon.com/)**. Hostinger deploys directly from **[rizad-mohamed/Quentagon](https://github.com/rizad-mohamed/Quentagon)** on `main`. Hirusha works as a collaborator in this repository; an additional repository is not part of the deployment workflow.
 
 ---
 
@@ -201,20 +203,20 @@ Hostinger's Next.js preset overrides the output setting with standalone server m
 
 ## Technology Stack
 
-| Area                   | Technologies                                       |
-| ---------------------- | -------------------------------------------------- |
-| Framework              | Next.js 16, App Router                             |
-| Interface              | React 19, TypeScript                               |
-| Styling                | CSS, SVG artwork                                   |
-| Motion                 | Motion                                             |
-| Icons                  | Phosphor Icons                                     |
-| Fonts                  | Self-hosted Manrope and IBM Plex Mono              |
-| Local tooling          | Node.js 24, npm, Git                               |
-| Code quality           | ESLint, Prettier, TypeScript checking              |
-| Browser testing        | Playwright, Chromium, axe-core                     |
-| Performance audit      | Lighthouse                                         |
-| CI                     | GitHub Actions in this original repository         |
-| Current public hosting | Hostinger, deploying the separate M-K-Hirusha copy |
+| Area                   | Technologies                                         |
+| ---------------------- | ---------------------------------------------------- |
+| Framework              | Next.js 16, App Router                               |
+| Interface              | React 19, TypeScript                                 |
+| Styling                | CSS, SVG artwork                                     |
+| Motion                 | Motion                                               |
+| Icons                  | Phosphor Icons                                       |
+| Fonts                  | Self-hosted Manrope and IBM Plex Mono                |
+| Local tooling          | Node.js 24, npm, Git                                 |
+| Code quality           | ESLint, Prettier, TypeScript checking                |
+| Browser testing        | Playwright, Chromium, axe-core                       |
+| Performance audit      | Lighthouse                                           |
+| CI                     | GitHub Actions in this repository                    |
+| Current public hosting | Hostinger, deploying this repository's `main` branch |
 
 Dependencies are pinned in `package.json`, and `package-lock.json` supports reproducible installation with `npm ci`.
 
@@ -250,7 +252,7 @@ Use PowerShell on Windows or a POSIX shell on macOS/Linux. A database or backend
 | `scripts/serve.mjs`                | Local static-preview server                           |
 | `scripts/audit.mjs`                | Lighthouse audit script                               |
 | `tests/`                           | Playwright test files                                 |
-| `.github/workflows/ci.yml`         | Original repository's validation workflow             |
+| `.github/workflows/ci.yml`         | Repository validation workflow                        |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Pull request template                                 |
 | `.openai/hosting.json`             | Earlier ChatGPT Sites project configuration           |
 | `.env.example`                     | Safe environment-variable placeholder                 |
@@ -366,20 +368,20 @@ This section describes the available checks, not a fixed pass count or a claim t
 
 ## CI and Deployment
 
-### Original Repository CI
+### Repository CI
 
 `.github/workflows/ci.yml` runs on pushes to `main`, pull requests and manual dispatch. It uses Node.js 24 and runs dependency installation, formatting, lint, types, production build and Chromium browser checks.
 
 Successful runs upload the `quentagon-static-site` artifact containing `out/`. Failed runs upload available browser diagnostics. Set the repository Actions variable `NEXT_PUBLIC_SITE_URL` to `https://quentagon.com` for production-origin artifacts.
 
-The workflow validates and packages the static site. It does not publish to Hostinger or synchronize the deployment copy.
+GitHub Actions validates and packages the static export. Hostinger builds and deploys the connected `main` branch separately; its deployment is managed through the Hostinger GitHub connection.
 
 ### Current Hostinger Deployment
 
 | Setting              | Value                                        |
 | -------------------- | -------------------------------------------- |
 | Live domain          | `https://quentagon.com/`                     |
-| Connected repository | `M-K-Hirusha/Quentagon` (separate copy)      |
+| Connected repository | `rizad-mohamed/Quentagon`                    |
 | Connected branch     | `main`                                       |
 | Framework            | Next.js                                      |
 | Node.js              | 24.x                                         |
@@ -396,11 +398,13 @@ See [Hostinger's Next.js documentation](https://docs.hostinger.com/node.js/overv
 
 ### Publishing Updates
 
-Until Hostinger is connected to this original repository, changes here need to be reviewed and explicitly brought into `M-K-Hirusha/Quentagon` before publication. They do not reach the live site automatically.
+1. Create a branch in `rizad-mohamed/Quentagon` and make the intended change.
+2. Open a pull request, review the change and ensure CI passes.
+3. Merge the approved pull request into `main`.
+4. Hostinger deploys the connected `main` branch when automatic deployment is enabled. If needed, use **Redeploy → Save and redeploy** in Hostinger to deploy its latest code.
+5. Confirm the deployment succeeds and check the affected pages on [quentagon.com](https://quentagon.com/).
 
-Hostinger can deploy pushes to its connected branch when automatic deployment is active. A manual **Redeploy → Save and redeploy** pulls the latest code from that connected branch. Check the deployment status and live website after publishing.
-
-The imported deployment copy currently lacks this original repository's `.github/` workflow folder. Its Hostinger build should not be treated as evidence that this repository's CI checks passed.
+Both Rizad and authorized collaborators follow this shared repository workflow. Website updates do not require copying commits into another GitHub repository. README-only changes update GitHub documentation; they do not change the visible website.
 
 ### Other Static Hosts and Earlier Configuration
 
@@ -418,7 +422,7 @@ Use `.next` with Hostinger's Next.js preset. That preset builds a standalone ser
 
 ### The live website does not reflect a merge
 
-Confirm which repository and branch Hostinger is connected to. A merge in `rizad-mohamed/Quentagon` does not update the separate `M-K-Hirusha/Quentagon` deployment copy. Bring the reviewed changes into the connected branch, deploy and check the build status.
+Confirm Hostinger is connected to `rizad-mohamed/Quentagon` on `main`, and check that the pull request was merged into that branch. Review the deployment status and build logs. If automatic deployment is disabled, redeploy the latest `main` commit manually. A README-only merge does not change website content.
 
 ### Contact does not send an email automatically
 
@@ -436,12 +440,14 @@ Set `NEXT_PUBLIC_SITE_URL=https://quentagon.com` in the relevant build environme
 
 ## Development Workflow
 
-1. Pull the latest `main` and create a focused topic branch.
+Both co-founders work in **`rizad-mohamed/Quentagon`**. Rizad maintains the repository and hosting connection; Hirusha contributes as a repository collaborator.
+
+1. Pull the latest `main` from this repository and create a focused topic branch.
 2. Make the intended change and run the relevant validation checks.
 3. Commit with a descriptive Conventional Commit message.
 4. Open a pull request with the change, validation results and any remaining limitations.
 5. Review the changes and ensure CI passes before merging.
-6. Publish through the repository currently connected to Hostinger.
+6. Verify Hostinger's deployment of this repository's `main` branch and check the live website.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the full contribution guidance. Preserve contributor attribution and genuine commit history.
 
@@ -476,40 +482,46 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full contribution guidance. Prese
 - Client portal and Quentagon Bot integrations are coming soon.
 - Contact submissions require the visitor's email application and are not sent automatically.
 - There is no application backend, database or user authentication.
-- The original and deployed repositories are separate and do not automatically synchronize.
 - Automated accessibility checks do not replace manual accessibility review.
 - Package version `1.0.0` does not establish a release tag or a production-readiness certification.
 
 ---
 
-## Future Improvements
+## Future Direction
 
-Potential improvements, subject to maintainer agreement:
+Quentagon is planned to grow beyond its current landing page into a comprehensive business management platform. The intended direction includes:
 
-- Connect the intended authoritative repository directly to production hosting.
-- Add an agreed server-side enquiry delivery service.
-- Implement the client portal and bot integrations when their requirements are defined.
-- Extend browser and accessibility coverage as features change.
-- Review measured production performance and search metadata.
-- Document a release and deployment process for the shared repository.
+- Company operations and internal business management.
+- Client management and shared project visibility.
+- Client onboarding.
+- Workflow automation.
+- A client portal and related integrations.
+
+These are planned capabilities, not features implemented in the current website. Their requirements, implementation scope and release milestones will be agreed as development progresses.
+
+Alongside that direction, ongoing website work can improve enquiry delivery, browser and accessibility coverage, production performance and search metadata.
 
 ---
 
 ## Project Background
 
-Quentagon presents software, design and technical delivery for prospective business clients. The live About section introduces **Rizad Mohamed** and **Hirusha Nilupul** as co-founders. This website was developed by Rizad Mohamed; repository history preserves contributor attribution.
+Quentagon was co-founded by **Rizad Mohamed** and **Hirusha Nilupul**. Its current website introduces the company, services and vision, with a longer-term direction toward integrated business management.
 
-| Item                       | Details                                                                                    |
-| -------------------------- | ------------------------------------------------------------------------------------------ |
-| Project name               | Quentagon                                                                                  |
-| Project type               | Technology studio and business services website                                            |
-| Tagline                    | Engineering intelligence for progress.                                                     |
-| Original developer         | [rizad-mohamed](https://github.com/rizad-mohamed)                                          |
-| Original source repository | [rizad-mohamed/Quentagon](https://github.com/rizad-mohamed/Quentagon)                      |
-| Live website               | [quentagon.com](https://quentagon.com/)                                                    |
-| Current deployment copy    | `M-K-Hirusha/Quentagon`                                                                    |
-| Primary visitors           | Prospective clients exploring services, work and project enquiries                         |
-| Main objective             | Present the studio's capabilities, delivery process and work through an accessible website |
+Rizad developed the website and maintains the GitHub repository connected to Hostinger. Hirusha works in the same repository as a collaborator. Contributor attribution and genuine commit history should be preserved.
+
+| Item                             | Details                                                                                    |
+| -------------------------------- | ------------------------------------------------------------------------------------------ |
+| Project name                     | Quentagon                                                                                  |
+| Project type                     | Technology studio and business services website                                            |
+| Tagline                          | Engineering intelligence for progress.                                                     |
+| Website developer                | [Rizad Mohamed](https://github.com/rizad-mohamed)                                          |
+| Source and deployment repository | [rizad-mohamed/Quentagon](https://github.com/rizad-mohamed/Quentagon)                      |
+| Live website                     | [quentagon.com](https://quentagon.com/)                                                    |
+| Co-founders                      | Rizad Mohamed and Hirusha Nilupul                                                          |
+| Repository collaboration         | Hirusha contributes as a collaborator in Rizad\'s repository                               |
+| Production hosting               | Hostinger, connected to this repository\'s `main` branch                                   |
+| Primary visitors                 | Prospective clients exploring services, work and project enquiries                         |
+| Main objective                   | Present the studio's capabilities, delivery process and work through an accessible website |
 
 ---
 
