@@ -28,9 +28,9 @@ export default function Hero() {
           >
             <p className="hero-eyebrow">Independent thinking. Connected technology.</p>
             <h1 id="hero-title">
-              Complex ideas.
+              Engineering intelligence.
               <br />
-              <span>Simply connected.</span>
+              <span>Built for progress.</span>
             </h1>
             <p className="hero-description">
               Software, websites and intelligent workflows that make your business work better.

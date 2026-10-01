@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { site } from "@/lib/site";
 import localFont from "next/font/local";
 import "./globals.css";
+import "./showcase.css";
+import "./automation.css";
+import "./service-workflows.css";
+import "./polish.css";
 
 const manrope = localFont({
   src: "../node_modules/@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2",
@@ -19,11 +23,11 @@ const mono = localFont({
 const origin = process.env.NEXT_PUBLIC_SITE_URL || site.url;
 export const metadata: Metadata = {
   ...(origin ? { metadataBase: new URL(origin), alternates: { canonical: "/" } } : {}),
-  title: "Quentagon | Intelligence. Precisely Engineered.",
+  title: "Quentagon | Engineering Intelligence for Progress",
   description:
     "Custom software, web and mobile applications, applied AI, security and cloud delivery. Quentagon takes your business systems from discovery to deployment and support.",
   openGraph: {
-    title: "Quentagon | Intelligence. Precisely Engineered.",
+    title: "Quentagon | Engineering Intelligence for Progress",
     description:
       "Business problems. Thoughtful software. A clear path from the first conversation to what comes next.",
     type: "website",
@@ -42,7 +46,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: origin ? "summary_large_image" : "summary",
-    title: "Quentagon | Intelligence. Precisely Engineered.",
+    title: "Quentagon | Engineering Intelligence for Progress",
     ...(origin ? { images: ["/brand/quentagon-social.webp"] } : {}),
   },
   icons: { icon: "/brand/favicon.png" },

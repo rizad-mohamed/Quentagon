@@ -1,0 +1,689 @@
+/* Shared finishing layer for the two site themes. */
+:root {
+  --demo-bg: #f7fafc;
+  --demo-surface: #ffffff;
+  --demo-ink: #243a4d;
+  --demo-muted: #526b7d;
+  --demo-line: #d7e3eb;
+  --demo-accent: #17649b;
+  --demo-grid: #cbdce8;
+  --demo-success: #176a57;
+  --demo-banner-start: #173c50;
+  --demo-banner-end: #285d69;
+  --demo-on-banner: #ffffff;
+  --demo-banner-muted: #c4e0eb;
+  --demo-shadow-color: #24497235;
+  --demo-glow: color-mix(in srgb, var(--demo-accent) 16%, transparent);
+  --demo-success-wash: color-mix(in srgb, var(--demo-success) 12%, var(--demo-surface));
+  --demo-warning: #96502e;
+  --device-frame: #293238;
+  --device-frame-ios: #7b8589;
+  --device-camera: #172329;
+  --device-edge: #738084;
+  --demo-hand: #f4d4bc;
+  --commerce-accent: #8d513b;
+  --commerce-action: #294a42;
+  --commerce-on-action: #ffffff;
+  --product-stage-start: #e8dac2;
+  --product-stage-end: #bcbea8;
+  --product-metal: #b08764;
+  --product-highlight: #f5ddad;
+  --product-stem: #805c42;
+  --product-glow: #fff2bf99;
+  --product-caption: #3d4e47;
+  --product-soft-start: #b4c8bb;
+  --product-soft-end: #e3d7c9;
+}
+:root[data-theme="dark"] {
+  --demo-bg: #111e2b;
+  --demo-surface: #1b2a3a;
+  --demo-ink: #eff7ff;
+  --demo-muted: #b3c6d5;
+  --demo-line: #38546c;
+  --demo-accent: #93c8ff;
+  --demo-grid: #34506a;
+  --demo-success: #74ddbe;
+  --demo-banner-start: #153345;
+  --demo-banner-end: #245261;
+  --demo-banner-muted: #c4e0eb;
+  --demo-shadow-color: #00000066;
+  --demo-warning: #efb58f;
+  --device-frame: #456075;
+  --device-frame-ios: #7895aa;
+  --device-camera: #0b141e;
+  --device-edge: #668094;
+  --demo-hand: #d5b89f;
+  --commerce-accent: #e8b39e;
+  --commerce-action: #a6d5c3;
+  --commerce-on-action: #173b32;
+  --product-stage-start: #4b4336;
+  --product-stage-end: #303d37;
+  --product-metal: #806448;
+  --product-highlight: #c8ad79;
+  --product-stem: #b18a66;
+  --product-glow: #ebc77933;
+  --product-caption: #eee2cb;
+  --product-soft-start: #344c42;
+  --product-soft-end: #524b40;
+}
+:root .brand {
+  color: var(--ink);
+}
+/* A workflow canvas based on Quentagon's intake, reasoning and review service. */
+.automation-demo {
+  border-color: var(--demo-line);
+  background: var(--demo-surface);
+  color: var(--demo-ink);
+}
+.automation-demo .demo-top,
+.automation-demo .flow-inputs,
+.automation-demo .flow-result {
+  background: var(--demo-surface);
+  border-color: var(--demo-line);
+}
+.automation-demo .demo-top > span:first-child,
+.automation-demo .flow-result,
+.automation-footer {
+  color: var(--demo-muted);
+}
+.automation-demo .flow-inputs button {
+  background: var(--demo-bg);
+  border-color: var(--demo-line);
+  color: var(--demo-muted);
+}
+.automation-demo .flow-inputs button[aria-pressed="true"] {
+  background: var(--blue-wash);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.automation-visual {
+  height: auto;
+  min-height: 365px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 35px 20px 24px;
+  border-color: var(--demo-line);
+  background-color: var(--demo-bg);
+  background-image:
+    radial-gradient(var(--demo-grid) 0.8px, transparent 0.8px),
+    radial-gradient(
+      ellipse at 46% 47%,
+      color-mix(in srgb, var(--accent) 10%, transparent),
+      transparent 57%
+    );
+  background-size:
+    17px 17px,
+    auto;
+}
+.automation-octagon {
+  inset: 26% 25%;
+  opacity: 0.3;
+  border-radius: 50%;
+  clip-path: none;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 22%, transparent),
+    transparent 70%
+  );
+  filter: blur(18px);
+  pointer-events: none;
+}
+.automation-octagon::after {
+  display: none;
+}
+.binary-stream {
+  left: 20px;
+  width: auto;
+  right: 20px;
+  color: var(--demo-muted);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  opacity: 0.65;
+  text-align: center;
+  animation: none;
+  transform: none;
+  text-overflow: ellipsis;
+}
+.binary-stream-top {
+  top: 12px;
+}
+.binary-stream-bottom {
+  bottom: 7px;
+}
+.automation-canvas {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 0.9fr 1.15fr 1fr 1fr;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 12px 0 15px;
+}
+.automation-track {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  padding: 0 11%;
+  pointer-events: none;
+}
+.track-segment {
+  height: 2px;
+  background: linear-gradient(90deg, var(--demo-line), var(--accent), var(--demo-line));
+  background-size: 200% 100%;
+  animation: flow-line 3s linear infinite;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.track-segment:nth-child(2) {
+  animation-delay: -0.8s;
+}
+.track-segment:nth-child(3) {
+  animation-delay: -1.6s;
+}
+@keyframes flow-line {
+  to {
+    background-position: -200% 0;
+  }
+}
+.workflow-tile {
+  position: relative;
+  min-width: 0;
+  min-height: 125px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
+  padding: 12px;
+  border: 1px solid var(--demo-line);
+  border-radius: 11px;
+  background: var(--demo-surface);
+  box-shadow: 0 10px 30px -24px var(--demo-shadow-color);
+  color: var(--demo-ink);
+  transition: transform 0.2s ease;
+}
+.workflow-tile:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  box-shadow: 0 16px 34px -22px color-mix(in srgb, var(--accent) 65%, transparent);
+}
+.workflow-kicker {
+  font: 8px var(--font-mono);
+  color: var(--demo-accent);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.workflow-tile strong {
+  font-size: 11px;
+  line-height: 1.2;
+}
+.workflow-tile small {
+  color: var(--demo-muted);
+  font-size: 8px;
+  line-height: 1.25;
+}
+.workflow-glyph {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  margin-block: 3px;
+  border: 1px solid var(--demo-line);
+  border-radius: 8px;
+  background: var(--blue-wash);
+  color: var(--accent);
+}
+.workflow-agent {
+  min-height: 176px;
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--accent) 11%, transparent),
+    0 13px 35px -20px var(--demo-glow);
+}
+.workflow-agent .automation-core {
+  position: static;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 5px;
+  row-gap: 1px;
+  width: 100%;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+.workflow-agent .automation-core > strong {
+  color: var(--demo-ink);
+  font-size: 11px;
+}
+.workflow-agent .automation-core > span {
+  color: var(--demo-muted);
+  font-size: 7px;
+}
+.workflow-agent .robot-head {
+  grid-row: span 2;
+  width: 46px;
+  height: 51px;
+  margin-block: 1px;
+}
+.workflow-agent .robot-eyes > span {
+  width: 8px;
+  height: 4px;
+}
+.workflow-agent .robot-eyes i {
+  width: 3px;
+  height: 3px;
+}
+.agent-tools {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+  margin-top: 3px;
+}
+.agent-tools span {
+  padding: 2px 4px;
+  border: 1px solid var(--demo-line);
+  border-radius: 4px;
+  color: var(--demo-muted);
+  font: 7px var(--font-mono);
+}
+.workflow-outputs {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.workflow-output {
+  min-height: 73px;
+  padding: 9px;
+}
+.workflow-output::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -16px;
+  width: 15px;
+  height: 1px;
+  background: var(--accent);
+}
+.automation-steps {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 4px;
+  width: 100%;
+  padding-top: 8px;
+  border-top: 1px solid var(--demo-line);
+}
+.automation-steps .automation-node {
+  position: static;
+  width: auto;
+  min-width: 0;
+  min-height: 28px;
+  padding: 4px;
+  gap: 3px;
+  border-color: var(--demo-line);
+  background: var(--demo-surface);
+  color: var(--demo-muted);
+  box-shadow: none;
+  font-size: 7px;
+  line-height: 1.1;
+}
+.automation-steps .automation-node > i {
+  width: 13px;
+  height: 14px;
+  font-size: 6px;
+}
+.automation-steps .automation-node.is-active {
+  transform: translateY(-2px);
+  background: var(--blue-wash);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.automation-footer {
+  background: var(--demo-surface);
+}
+
+/* Service rows keep their visual weight regardless of copy length. */
+.service-grid {
+  align-items: stretch;
+}
+.service-card {
+  height: 100%;
+  min-height: 590px;
+}
+.service-card .service-copy {
+  min-height: 154px;
+  width: 100%;
+}
+.service-card > .interactive-visual,
+.service-card > .micro-stage {
+  margin-bottom: 24px;
+}
+.service-card > .text-link {
+  margin-top: auto;
+}
+.service-card,
+.service-feature,
+.work-reference,
+.founder,
+.product-panel {
+  transition: transform 0.2s ease;
+}
+.service-card:hover,
+.service-feature:hover,
+.work-reference:hover,
+.founder:hover,
+.product-panel:hover {
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
+  box-shadow: 0 22px 48px -38px color-mix(in srgb, var(--accent) 44%, transparent);
+}
+.service-index a,
+.text-link,
+.button,
+.icon-button,
+.nav-actions button,
+.bot-trigger {
+  transition: transform 0.2s ease;
+}
+.service-index a:hover,
+.text-link:hover,
+.button:hover,
+.icon-button:hover,
+.nav-actions button:hover {
+  transform: translateY(-2px);
+}
+.service-index a:active,
+.text-link:active,
+.button:active,
+.icon-button:active,
+.nav-actions button:active {
+  transform: scale(0.98);
+}
+
+/* The assistant preview sits clear of the motion control at every width. */
+.motion-control {
+  right: 92px;
+}
+.bot-dock {
+  position: fixed;
+  z-index: 50;
+  right: 20px;
+  bottom: 20px;
+}
+.bot-trigger {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border: 1px solid color-mix(in srgb, var(--accent) 50%, var(--line));
+  border-radius: 18px;
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 12px 30px -12px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+.bot-trigger:hover {
+  transform: translateY(-4px);
+}
+.bot-trigger:active {
+  transform: scale(0.96);
+}
+.bot-whatsapp {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  border: 2px solid var(--bg);
+  border-radius: 50%;
+  background: #168b63;
+  color: #fff;
+}
+.bot-indicator {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--bg);
+  border-radius: 50%;
+  background: #59cfa9;
+  animation: bot-breathe 2.7s ease-in-out infinite;
+}
+@keyframes bot-breathe {
+  50% {
+    box-shadow: 0 0 0 7px #59cfa92a;
+  }
+}
+.bot-panel {
+  width: min(340px, calc(100vw - 32px));
+  margin-bottom: 13px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 25px 65px -30px #071b3399;
+  animation: bot-enter 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes bot-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+}
+.bot-panel-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  border-bottom: 1px solid var(--line);
+  background: var(--blue-wash);
+}
+.bot-avatar {
+  display: grid;
+  place-items: center;
+  width: 35px;
+  height: 35px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--bg);
+}
+.bot-panel-top div {
+  display: grid;
+  gap: 1px;
+}
+.bot-panel-top strong {
+  font-size: 13px;
+  line-height: 1.3;
+}
+.bot-panel-top small {
+  color: var(--accent);
+  font: 9px var(--font-mono);
+  letter-spacing: 0.08em;
+}
+.bot-panel-top button {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+}
+.bot-panel > p {
+  padding: 16px 16px 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.bot-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 16px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--wash);
+  color: var(--ink);
+  font-size: 11px;
+}
+.bot-message-dot {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.bot-panel > a {
+  display: block;
+  margin: 0 16px 16px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+@media (max-width: 1023px) {
+  .service-card {
+    min-height: 550px;
+  }
+  .service-card .service-copy {
+    min-height: 145px;
+  }
+}
+@media (max-width: 767px) {
+  .section-shell {
+    width: calc(100% - 32px);
+  }
+  .service-grid {
+    gap: 16px;
+  }
+  .service-card {
+    min-height: 0;
+    height: auto;
+  }
+  .service-card .service-copy {
+    min-height: 0;
+  }
+  .service-card > .interactive-visual,
+  .service-card > .micro-stage {
+    width: 100%;
+  }
+  .automation-visual {
+    min-height: 0;
+    padding: 34px 10px 20px;
+  }
+  .automation-canvas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .automation-track {
+    display: none;
+  }
+  .workflow-tile {
+    min-height: 98px;
+    padding: 9px;
+  }
+  .workflow-agent {
+    min-height: 138px;
+  }
+  .workflow-agent .automation-core {
+    grid-template-columns: 37px minmax(0, 1fr);
+  }
+  .workflow-agent .robot-head {
+    width: 37px;
+    height: 41px;
+  }
+  .workflow-decision {
+    grid-column: 1;
+  }
+  .workflow-outputs {
+    grid-column: 2;
+    grid-row: 2;
+    gap: 5px;
+  }
+  .workflow-output {
+    min-height: 65px;
+  }
+  .workflow-output::before {
+    display: none;
+  }
+  .automation-steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .binary-stream {
+    font-size: 6px;
+  }
+  .motion-control {
+    right: 82px;
+    bottom: 12px;
+  }
+  .bot-dock {
+    right: 12px;
+    bottom: 12px;
+  }
+  .bot-trigger {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+  }
+}
+@media (max-width: 380px) {
+  .section-shell {
+    width: calc(100% - 24px);
+  }
+  .automation-steps .automation-node {
+    font-size: 6px;
+  }
+  .bot-panel {
+    width: calc(100vw - 24px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .track-segment,
+  .bot-indicator,
+  .bot-panel {
+    animation: none;
+  }
+  .workflow-tile,
+  .service-card,
+  .service-feature {
+    transition: none;
+  }
+}
+:root[data-motion="paused"] .track-segment,
+:root[data-motion="paused"] .bot-indicator,
+:root[data-motion="paused"] .bot-panel {
+  animation: none;
+}
+
+/* Preview controls share feedback and keyboard focus across all seven services. */
+.services-section :is(button, .text-link, .service-index a) {
+  transition: transform 0.2s ease;
+}
+.services-section button:hover {
+  box-shadow: 0 0 0 1px var(--demo-accent);
+}
+.services-section button:active {
+  transform: scale(0.98);
+}
+.services-section :is(button, a):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}

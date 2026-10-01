@@ -11,7 +11,7 @@ export default function Manifesto() {
         </p>
         <p>
           We bring the right pieces together, from a better website to a complete business platform.
-          Thoughtfully designed. Precisely engineered.
+          Thoughtfully designed. Built to last.
         </p>
       </div>
     </section>

@@ -2,6 +2,8 @@ import { ArrowUpRight, Plus } from "@phosphor-icons/react/dist/ssr";
 import Navigation, { Brand } from "@/components/navigation";
 import Hero from "@/components/hero";
 import ServiceStories from "@/components/service-stories";
+import GlobalNetwork from "@/components/global-network";
+import SignalRail from "@/components/signal-rail";
 import MotionControl from "@/components/motion-control";
 import PentagonArt from "@/components/pentagon-art";
 import Manifesto from "@/components/manifesto";
@@ -9,6 +11,8 @@ import Finale from "@/components/finale";
 import ProjectJourney from "@/components/project-journey";
 import ContactForm from "@/components/contact-form";
 import Reveal from "@/components/reveal";
+import AmbientMotion from "@/components/ambient-motion";
+import QuentagonBot from "@/components/quentagon-bot";
 import { site } from "@/lib/site";
 
 export default function Home() {
@@ -27,10 +31,14 @@ export default function Home() {
     <div id="top">
       <Navigation />
       <MotionControl />
+      <AmbientMotion />
+      <SignalRail />
+      <QuentagonBot />
       <main id="main">
         <Hero />
         <Manifesto />
         <ServiceStories />
+        <GlobalNetwork />
         <ProjectJourney />
         <section id="work" className="work-section section-shell">
           <Reveal>
@@ -99,21 +107,21 @@ export default function Home() {
               <PentagonArt />
             </div>
             <div className="product-content">
-              <span className="coming-soon">PRODUCT PORTFOLIO / COMING SOON</span>
+              <span className="coming-soon">PRODUCT SPOTLIGHT / CYMS</span>
               <h2>
-                More possibilities.
+                Built for construction.
                 <br />
-                Already taking shape.
+                Ready for real operations.
               </h2>
               <p>
-                Our SaaS product portfolio is taking shape. We&apos;ll share the products, their
-                purpose and how to get started here.
+                CYMS brings project activity, people, costs and decisions into one construction
+                management platform. Explore its operational model in the software showcase above.
               </p>
               <a
                 className="text-link"
                 href="mailto:rizad.dev@gmail.com?subject=Quentagon%20product%20enquiry"
               >
-                Ask about our products <ArrowUpRight size={18} />
+                Ask about CYMS <ArrowUpRight size={18} />
               </a>
             </div>
           </Reveal>
@@ -183,7 +191,7 @@ export default function Home() {
       <footer className="site-footer section-shell">
         <div className="footer-top">
           <Brand footer />
-          <p>Intelligence. Precisely engineered.</p>
+          <p>Engineering intelligence for meaningful progress.</p>
           <a href="#top" className="text-link">
             Back to top <ArrowUpRight size={16} />
           </a>
