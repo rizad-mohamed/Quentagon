@@ -1,4 +1,4 @@
-﻿import { defineConfig, devices } from "@playwright/test";
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./tests",
@@ -20,5 +20,13 @@ export default defineConfig({
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
+  webServer: process.env.PLAYWRIGHT_BASE_URL
+    ? undefined
+    : {
+        command: "npm start",
+        url: "http://127.0.0.1:3003",
+        reuseExistingServer: !process.env.CI,
+        timeout: 30_000,
+      },
   projects: [{ name: "chromium", use: { browserName: "chromium" } }],
 });

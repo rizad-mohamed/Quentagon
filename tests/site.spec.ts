@@ -1,8 +1,57 @@
 ﻿import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
+test("theme reaches workflow previews and assistant preview remains honest", async ({ page }) => {
+  await openSite(page);
+  const automation = page.locator(".automation-demo");
+  const consulting = page.locator("#consulting .engagement-demo");
+  const themedParts = [
+    ".engagement-top",
+    ".engagement-handoff",
+    ".engagement-track button[aria-pressed='true'] > span",
+    ".engagement-output",
+  ];
+  const lightColor = await automation.evaluate(
+    (element) => getComputedStyle(element).backgroundColor,
+  );
+  const lightParts = await Promise.all(
+    themedParts.map((selector) =>
+      consulting.locator(selector).evaluate((element) => getComputedStyle(element).backgroundColor),
+    ),
+  );
+  await page.getByRole("button", { name: "Toggle light and dark theme" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect
+    .poll(() => automation.evaluate((element) => getComputedStyle(element).backgroundColor))
+    .not.toBe(lightColor);
+  for (const [index, selector] of themedParts.entries()) {
+    await expect
+      .poll(() =>
+        consulting
+          .locator(selector)
+          .evaluate((element) => getComputedStyle(element).backgroundColor),
+      )
+      .not.toBe(lightParts[index]);
+  }
+  await expect(page.locator(".workflow-agent")).toContainText("Quentagon AI");
+  const agentFits = await page.locator(".workflow-agent .automation-core").evaluate((element) => {
+    const parent = element.closest(".workflow-agent")!.getBoundingClientRect();
+    const child = element.getBoundingClientRect();
+    return child.left >= parent.left && child.right <= parent.right;
+  });
+  expect(agentFits).toBe(true);
+  await page.getByRole("button", { name: "Open Quentagon Bot preview" }).click();
+  await expect(page.getByText("Chat and WhatsApp support are on the way.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Close Quentagon Bot" })).toHaveAttribute(
+    "aria-expanded",
+    "true",
+  );
+  await page.getByRole("button", { name: "Close Quentagon Bot" }).click();
+  await expect(page.getByText("Chat and WhatsApp support are on the way.")).toHaveCount(0);
+});
+
 async function openSite(page: Page) {
-  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await page.goto("/", { waitUntil: "load" });
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.getByRole("button", { name: "Pause decorative animation" })).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
@@ -18,13 +67,13 @@ async function expectNoHorizontalOverflow(page: Page) {
   expect(widths.body, JSON.stringify(widths)).toBeLessThanOrEqual(widths.viewport + 1);
 }
 
-for (const width of [360, 390, 768, 1024, 1440, 1920]) {
+for (const width of [320, 360, 390, 430, 768, 834, 1024, 1180, 1440, 1920, 2560]) {
   test(`layout remains usable without horizontal overflow at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 1000 });
     await openSite(page);
     await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
     await expectNoHorizontalOverflow(page);
-    for (const selector of ["#services", "#process", "#contact", "footer"]) {
+    for (const selector of ["#services", "#process", "#contact", "footer.site-footer"]) {
       await page.locator(selector).scrollIntoViewIfNeeded();
       await expectNoHorizontalOverflow(page);
     }
@@ -32,35 +81,116 @@ for (const width of [360, 390, 768, 1024, 1440, 1920]) {
   });
 }
 
-test("seven service chapters expose distinct working interactions", async ({ page }) => {
+for (const viewport of [
+  { width: 667, height: 375 },
+  { width: 1024, height: 768 },
+  { width: 2560, height: 1440 },
+  { width: 3840, height: 2160 },
+]) {
+  test(`landscape layout stays within ${viewport.width}x${viewport.height}`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await openSite(page);
+    for (const selector of ["#services", "#consulting", "#contact", "footer.site-footer"]) {
+      await page.locator(selector).scrollIntoViewIfNeeded();
+      await expectNoHorizontalOverflow(page);
+    }
+  });
+}
+
+test("visible buttons meet the minimum target size on narrow and wide screens", async ({
+  page,
+}) => {
+  for (const width of [320, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await openSite(page);
+    const small = await page.locator("button").evaluateAll((buttons) =>
+      buttons.flatMap((button) => {
+        const rect = button.getBoundingClientRect();
+        if (
+          rect.width === 0 ||
+          rect.height === 0 ||
+          getComputedStyle(button).visibility === "hidden"
+        )
+          return [];
+        return rect.width < 24 || rect.height < 24
+          ? [
+              `${button.textContent?.trim() || button.getAttribute("aria-label")}: ${Math.round(rect.width)}x${Math.round(rect.height)}`,
+            ]
+          : [];
+      }),
+    );
+    expect(small, `${width}px`).toEqual([]);
+  }
+});
+
+test("service infographics respond to operations, devices and platforms", async ({ page }) => {
   await openSite(page);
-  const navigation = page.getByRole("navigation", { name: "Explore services" });
-  await expect(navigation.getByRole("link")).toHaveCount(7);
-  await navigation.getByRole("link", { name: /Custom software/ }).click();
-  await page
-    .getByRole("group", { name: "Explore software workflows" })
-    .getByRole("button", { name: "Projects", exact: true })
+  const software = page.locator("#custom-software");
+  await expect(software.locator(".enterprise-window")).toContainText("Management System");
+  await expect(software.locator(".enterprise-window")).not.toContainText("CYMS");
+  await software
+    .getByRole("group", { name: "Explore Management System dashboards" })
+    .getByRole("button", { name: "Finance" })
     .click();
-  await expect(page.locator(".workspace-content")).toContainText("Customer portal");
-  await page.getByRole("button", { name: "Preview checkout", exact: true }).click();
-  await expect(page.locator(".checkout-detail")).toContainText("Item selected");
-  await page.getByRole("button", { name: "Back to collection", exact: true }).click();
-  await expect(page.locator(".store-preview")).toContainText("A considered collection");
-  await page.getByRole("button", { name: "Android", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Android", exact: true })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
-  await page
-    .getByRole("group", { name: "Mobile screen" })
-    .getByRole("button", { name: "Activity" })
+  await expect(software.locator(".system-finance")).toContainText("Spend against forecast");
+  await software
+    .getByRole("group", { name: "Explore Management System dashboards" })
+    .getByRole("button", { name: "Projects" })
     .click();
-  await expect(page.locator(".phone-note")).toContainText("Project review recorded");
-  await page.getByRole("button", { name: "Run example", exact: true }).click();
-  await expect(page.locator(".flow-result")).toContainText("Example complete");
+  await expect(software.locator(".system-kanban-column")).toHaveCount(3);
+  await software.getByRole("button", { name: "People" }).click();
+  await expect(software.locator(".system-roster")).toContainText("Team availability");
+  await software.getByRole("button", { name: "Command" }).click();
+  await expect(software.locator(".system-command")).toContainText("PORTFOLIO PULSE");
+
+  const web = page.locator("#web-commerce");
+  await web
+    .getByRole("group", { name: "Preview website screen size" })
+    .getByRole("button", { name: "Mobile" })
+    .click();
+  await expect(web.locator(".web-device")).toHaveClass(/web-device-mobile/);
+  await expect(
+    web.getByRole("img", { name: "Illustration of the Form 01 table lamp" }),
+  ).toBeVisible();
+  await web.getByRole("button", { name: "Explore the collection" }).click();
+  await expect(web.locator(".web-story")).toContainText("LIGHTING / FORM 01");
+  await web.getByRole("button", { name: /Add to bag/ }).click();
+  await expect(web.locator(".web-checkout")).toContainText("SECURE CHECKOUT");
+  await expect(
+    web.getByRole("img", { name: "Illustration of the Form 01 table lamp" }),
+  ).toBeVisible();
+  await web
+    .getByRole("group", { name: "Preview website screen size" })
+    .getByRole("button", { name: "Tablet" })
+    .click();
+  await expect(web.locator(".web-device")).toHaveClass(/web-device-tablet/);
+  await web
+    .getByRole("group", { name: "Preview website screen size" })
+    .getByRole("button", { name: "Desktop" })
+    .click();
+  await expect(web.locator(".web-device")).toHaveClass(/web-device-desktop/);
+
+  const mobile = page.locator("#mobile-apps");
+  await mobile
+    .getByRole("group", { name: "Preview mobile platform" })
+    .getByRole("button", { name: "Android" })
+    .click();
+  await expect(mobile.locator(".app-phone")).toHaveClass(/app-phone-android/);
+  await mobile.getByRole("button", { name: "Save item" }).click();
+  await expect(mobile.getByRole("button", { name: "Saved" })).toBeVisible();
+  await mobile
+    .getByRole("group", { name: "Explore app screens" })
+    .getByRole("button", { name: "Orders" })
+    .click();
+  await expect(mobile.locator(".app-order")).toContainText("Order on its way");
+
+  await expect(page.locator("#ai-automation .automation-octagon")).toBeVisible();
+  await expect(page.locator("#ai-automation .robot-head")).toBeVisible();
+  await expect(page.locator("#ai-automation .automation-footer")).toContainText("Human oversight");
+  await expect(page.getByRole("button", { name: "Run example" })).toHaveCount(0);
   await page
     .getByRole("group", { name: "Explore security layers" })
-    .getByRole("button", { name: "Review", exact: true })
+    .getByRole("button", { name: "Review" })
     .click();
   await expect(page.locator(".security-explanation")).toContainText("qualified specialist");
   await page
@@ -68,11 +198,170 @@ test("seven service chapters expose distinct working interactions", async ({ pag
     .getByRole("button", { name: "Deploy" })
     .click();
   await expect(page.locator(".deployment-explanation")).toContainText("agreed deployment plan");
-  await page.getByRole("button", { name: "Improve a system" }).click();
-  await expect(page.locator(".decision-route")).toContainText("Understand the friction");
   await expect(page.locator("[data-service-index]")).toHaveCount(7);
 });
 
+test("commerce preview follows viewport size and keeps mobile actions inside its frame", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 768, height: 900 });
+  await openSite(page);
+  const web = page.locator("#web-commerce");
+  const controls = web.getByRole("group", { name: "Preview website screen size" });
+  await expect(controls.getByRole("button", { name: "Tablet" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await page.setViewportSize({ width: 360, height: 800 });
+  await expect(controls.getByRole("button", { name: "Mobile" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  for (const action of ["Explore the collection", "Add to bag", "Explore again"]) {
+    const button = web.getByRole("button", { name: new RegExp(action) });
+    await expect(button).toBeVisible();
+    const fits = await button.evaluate((element) => {
+      const frame = element.closest(".web-screen")!.getBoundingClientRect();
+      const bounds = element.getBoundingClientRect();
+      return (
+        bounds.left >= frame.left && bounds.right <= frame.right && bounds.bottom <= frame.bottom
+      );
+    });
+    expect(fits, action).toBe(true);
+    await button.click();
+  }
+  await page.setViewportSize({ width: 320, height: 800 });
+  await expect(web.locator(".web-device")).toHaveClass(/web-device-mobile/);
+  expect(
+    await web.locator(".web-product").evaluate((element) => element.getBoundingClientRect().width),
+  ).toBeGreaterThan(150);
+  await expectNoHorizontalOverflow(page);
+});
+
+test("cloud and consulting workspaces expose clear stages and deliverables", async ({ page }) => {
+  await openSite(page);
+  const cloud = page.locator("#cloud-devops");
+  await cloud
+    .getByRole("group", { name: "Explore deployment stages" })
+    .getByRole("button", { name: "Connect" })
+    .click();
+  await expect(cloud.locator(".infra-detail")).toContainText("Routes validated");
+  await cloud.getByRole("button", { name: "Deploy" }).click();
+  await expect(cloud.locator(".deployment-explanation")).toContainText("agreed deployment plan");
+
+  const consulting = page.locator("#consulting");
+  await consulting
+    .getByRole("group", { name: "Explore your starting point" })
+    .getByRole("button", { name: "Improve a system" })
+    .click();
+  await expect(consulting.locator(".engagement-story")).toContainText("Locate the friction");
+  await consulting
+    .getByRole("group", { name: "Explore consultancy story phases" })
+    .getByRole("button", { name: "Deliver" })
+    .click();
+  await expect(consulting.locator(".engagement-output")).toContainText("Reliable updated system");
+});
+
+test("automatic product stories animate and the AI eyes follow the pointer", async ({
+  page,
+}, testInfo) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await openSite(page);
+  const software = page.locator("#custom-software");
+  await expect(
+    software
+      .getByRole("group", { name: "Explore Management System dashboards" })
+      .getByRole("button", { name: "Projects" }),
+  ).toHaveAttribute("aria-pressed", "true", { timeout: 7000 });
+  await expect(software.locator(".system-demo-pointer")).toBeVisible();
+
+  const web = page.locator("#web-commerce");
+  await web.scrollIntoViewIfNeeded();
+  await web.getByRole("button", { name: "Mobile" }).click();
+  const commerceShot = testInfo.outputPath("commerce-mobile.png");
+  await web.screenshot({ path: commerceShot });
+  await testInfo.attach("commerce-mobile", {
+    path: commerceShot,
+    contentType: "image/png",
+  });
+
+  const mobile = page.locator("#mobile-apps");
+  await mobile.scrollIntoViewIfNeeded();
+  await expect(mobile.locator(".app-hand")).toBeVisible();
+  await expect
+    .poll(() => mobile.locator(".app-content").evaluate((element) => element.scrollTop), {
+      timeout: 7000,
+    })
+    .toBeGreaterThan(20);
+  await mobile.getByRole("button", { name: "Android / Galaxy" }).click();
+  await expect(mobile.locator(".app-phone")).toHaveCSS("opacity", "1");
+  const galaxyShot = testInfo.outputPath("galaxy-preview.png");
+  await mobile.screenshot({ path: galaxyShot });
+  await testInfo.attach("galaxy-preview", {
+    path: galaxyShot,
+    contentType: "image/png",
+  });
+
+  const automation = page.locator("#ai-automation .automation-demo");
+  await automation.scrollIntoViewIfNeeded();
+  const initial = await automation.locator(".flow-result").textContent();
+  await expect
+    .poll(() => automation.locator(".flow-result").textContent(), { timeout: 4000 })
+    .not.toBe(initial);
+  await expect(automation.locator(".binary-stream")).toHaveCount(2);
+  const bounds = await automation.boundingBox();
+  expect(bounds).not.toBeNull();
+  await page.mouse.move(bounds!.x + bounds!.width * 0.85, bounds!.y + bounds!.height * 0.5);
+  await expect
+    .poll(() =>
+      automation.evaluate((element) =>
+        Number.parseFloat(element.style.getPropertyValue("--eye-x")),
+      ),
+    )
+    .toBeGreaterThan(0);
+  const automationShot = testInfo.outputPath("automation-preview.png");
+  await automation.screenshot({ path: automationShot });
+  await testInfo.attach("automation-preview", {
+    path: automationShot,
+    contentType: "image/png",
+  });
+
+  const cloud = page.locator("#cloud-devops .infra-demo");
+  await cloud.scrollIntoViewIfNeeded();
+  const initialCloudStage = await cloud.locator(".infra-canvas").getAttribute("class");
+  await expect
+    .poll(() => cloud.locator(".infra-canvas").getAttribute("class"), { timeout: 6000 })
+    .not.toBe(initialCloudStage);
+  await expect(cloud.locator(".infra-wire i").first()).toHaveCSS("animation-name", "infra-packet");
+
+  const consulting = page.locator("#consulting .engagement-demo");
+  await consulting.scrollIntoViewIfNeeded();
+  const selectedPhase = await consulting
+    .getByRole("group", { name: "Explore consultancy story phases" })
+    .getByRole("button", { pressed: true })
+    .textContent();
+  await expect
+    .poll(
+      () =>
+        consulting
+          .getByRole("group", { name: "Explore consultancy story phases" })
+          .getByRole("button", { pressed: true })
+          .textContent(),
+      { timeout: 6000 },
+    )
+    .not.toBe(selectedPhase);
+});
+test("global connections respond to market selections", async ({ page }) => {
+  await openSite(page);
+  const map = page.locator("#global-network");
+  await map
+    .getByRole("group", { name: "Explore global markets" })
+    .getByRole("button", { name: "New Zealand" })
+    .click();
+  await expect(map.locator(".market-story")).toContainText("New Zealand");
+  await expect(map.locator(".review-preview")).toContainText("Illustrative review");
+  await expect(map.locator(".map-routes .is-selected")).toHaveCount(1);
+});
 test("mobile navigation closes with Escape, restores focus and follows section links", async ({
   page,
 }) => {
@@ -177,8 +466,14 @@ for (const theme of ["dark", "light"] as const) {
 }
 
 test("reduced motion preserves content and uses immediate scrolling", async ({ page }) => {
+  const hydrationErrors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error" && message.text().includes("hydrated"))
+      hydrationErrors.push(message.text());
+  });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await openSite(page);
+  expect(hydrationErrors).toEqual([]);
   expect(await page.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches)).toBe(
     true,
   );
@@ -214,7 +509,7 @@ for (const variant of [
       "#products",
       "#about",
       "#contact",
-      "footer",
+      "footer.site-footer",
     ]) {
       await page.locator(selector).scrollIntoViewIfNeeded();
     }
@@ -365,7 +660,7 @@ test("every local resource downloads successfully and images decode", async ({ p
     if (response.status() >= 400) failed.push(response.url() + ": " + response.status());
   });
   await openSite(page);
-  await page.locator("footer").scrollIntoViewIfNeeded();
+  await page.locator("footer.site-footer").scrollIntoViewIfNeeded();
   await page.waitForLoadState("networkidle");
   const images = await page.locator("img").evaluateAll((nodes) =>
     nodes.map((node) => {
