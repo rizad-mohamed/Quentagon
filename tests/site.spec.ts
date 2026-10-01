@@ -1,4 +1,4 @@
-﻿import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 test("theme reaches workflow previews and assistant preview remains honest", async ({ page }) => {
@@ -661,17 +661,39 @@ test("every local resource downloads successfully and images decode", async ({ p
   });
   await openSite(page);
   await page.locator("footer.site-footer").scrollIntoViewIfNeeded();
-  await page.waitForLoadState("networkidle");
-  const images = await page.locator("img").evaluateAll((nodes) =>
-    nodes.map((node) => {
-      const img = node as HTMLImageElement;
-      return { src: img.currentSrc, loaded: img.complete && img.naturalWidth > 0 };
-    }),
+  const images = page.locator("img");
+  expect(await images.count()).toBeGreaterThan(0);
+  // Trigger each lazy image independently; network idle does not guarantee image readiness.
+  for (const image of await images.all()) await image.scrollIntoViewIfNeeded();
+  await expect
+    .poll(
+      () =>
+        images.evaluateAll((nodes) =>
+          nodes
+            .map((node) => {
+              const img = node as HTMLImageElement;
+              return {
+                src: img.currentSrc || img.src,
+                loaded: img.complete && img.naturalWidth > 0,
+              };
+            })
+            .filter((image) => !image.loaded),
+        ),
+      { timeout: 15_000, message: "Every image must finish loading successfully" },
+    )
+    .toEqual([]);
+  await images.evaluateAll((nodes) =>
+    Promise.all(
+      nodes.map(async (node) => {
+        const img = node as HTMLImageElement;
+        try {
+          await img.decode();
+        } catch {
+          throw new Error(`Image failed to decode: ${img.currentSrc || img.src}`);
+        }
+      }),
+    ),
   );
-  expect(
-    images.every((img) => img.loaded),
-    JSON.stringify(images),
-  ).toBe(true);
   expect(await page.evaluate(() => document.fonts.status)).toBe("loaded");
   expect(failed).toEqual([]);
 });
