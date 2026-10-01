@@ -1,21 +1,78 @@
-<h1 align="center">Quentagon — Technology Studio Website</h1>
+<h1 align="center">Quentagon</h1>
+
+<p align="center"><strong>Technology Studio &amp; Digital Solutions Website</strong></p>
 
 <p align="center">
-  <img src="public/brand/quentagon-mark.webp" alt="Quentagon logo" width="160" />
+  <img src="assets/brand-originals/quentagon-readme.png" alt="Quentagon logo — Intelligence. Precisely Engineered." width="600" />
 </p>
 
 <p align="center">
   <strong>Engineering intelligence for progress.</strong><br />
-  Custom software, web and mobile applications, AI automation, security and cloud delivery.
+  Software, websites and intelligent workflows that make your business work better.
+</p>
+
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=nextjs,react,ts,css,nodejs,git,github" alt="Next.js, React, TypeScript, CSS, Node.js, Git and GitHub" />
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Hosting-Hostinger-673DE6?style=for-the-badge&amp;logo=hostinger&amp;logoColor=white" alt="Hostinger hosting" />
+  <img src="https://img.shields.io/badge/Tests-Playwright%20%2B%20axe--core-16A34A?style=for-the-badge" alt="Playwright and axe-core browser testing" />
+  <img src="https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?style=for-the-badge&amp;logo=githubactions&amp;logoColor=white" alt="GitHub Actions validation" />
 </p>
 
 <p align="center">
   <a href="https://quentagon.com/">Live Website</a> ·
   <a href="CONTRIBUTING.md">Contributing</a> ·
-  <a href="SECURITY.md">Security</a>
+  <a href="SECURITY.md">Security</a> ·
+  <a href="https://github.com/rizad-mohamed/Quentagon/actions/workflows/ci.yml">CI Results</a>
 </p>
 
-Developed by **[rizad-mohamed](https://github.com/rizad-mohamed)**.
+Developed by **[Rizad Mohamed](https://github.com/rizad-mohamed)**.
+
+---
+
+## Project Status
+
+| Item                      | Current state                                                                 |
+| ------------------------- | ----------------------------------------------------------------------------- |
+| Public website            | [quentagon.com](https://quentagon.com/)                                       |
+| Original source           | [rizad-mohamed/Quentagon](https://github.com/rizad-mohamed/Quentagon), `main` |
+| Current deployment source | Separate `M-K-Hirusha/Quentagon` copy, `main`                                 |
+| Hosting                   | Hostinger Next.js deployment                                                  |
+| Application               | Public business website with browser interactions                             |
+| Contact                   | Email draft opened in the visitor's email application                         |
+| Client portal and bot     | Coming soon                                                                   |
+
+Changes to the original repository need to be brought into the connected deployment copy before they can reach the live website. The repositories do not automatically synchronize.
+
+---
+
+## Contents
+
+- [Project Overview](#project-overview)
+- [Problem Statement](#problem-statement)
+- [Proposed Solution](#proposed-solution)
+- [Core Features](#core-features)
+- [Website Workflow](#website-workflow)
+- [Architecture](#architecture)
+- [Technology Stack](#technology-stack)
+- [Prerequisites](#prerequisites)
+- [Repository Structure](#repository-structure)
+- [Quick Installation](#quick-installation)
+- [Environment Configuration](#environment-configuration)
+- [Common Commands](#common-commands)
+- [Testing and Release Verification](#testing-and-release-verification)
+- [CI and Deployment](#ci-and-deployment)
+- [Troubleshooting](#troubleshooting)
+- [Development Workflow](#development-workflow)
+- [Security Rules](#security-rules)
+- [Project Documentation](#project-documentation)
+- [Limitations](#limitations)
+- [Future Improvements](#future-improvements)
+- [Project Background](#project-background)
+- [Repository](#repository)
+- [License and Use](#license-and-use)
 
 ---
 
@@ -45,7 +102,7 @@ The implementation combines Next.js-rendered content with React client component
 
 ---
 
-## Key Features
+## Core Features
 
 ### Services and Capabilities
 
@@ -96,6 +153,10 @@ Illustrations and demonstration data do not establish that the displayed custome
 
 ## Website Workflow
 
+### Delivery Journey
+
+The live page presents eight stages: **Discover → Define → Architect → Design → Build → Validate → Deploy → Support**. These are an illustrative engagement process; scope, milestones and support are agreed for each project.
+
 1. Explore the services and capabilities.
 2. Review the delivery process and project references.
 3. Select a service and describe a project in the contact form.
@@ -103,6 +164,38 @@ Illustrations and demonstration data do not establish that the displayed custome
 5. Review and send the enquiry using an email application.
 
 The client portal and Quentagon Bot integrations are marked as coming soon. They do not provide an authenticated portal or a live AI service in the current implementation.
+
+---
+
+## Architecture
+
+The diagram describes the implemented website and its current Hostinger delivery path. The dashboards, API gateway and AI workflows shown in service illustrations are examples of offered capabilities, rather than services running behind this website.
+
+```mermaid
+flowchart TD
+    Visitor["Visitor browser"] <-->|HTTPS| Host["Hostinger · quentagon.com"]
+    Host -->|Serves website| Next["Next.js 16 · App Router"]
+    Content["Page composition · service data · site identity"] -->|Build-time content| Next
+    Assets["CSS · SVG · fonts · brand assets"] -->|Website resources| Next
+    Next -->|React hydration| UI["Navigation · journey · themes · contact form"]
+    UI -->|mailto: opens a draft| Email["Visitor email application"]
+```
+
+Content comes from `app/`, `data/` and `lib/`; React client components provide browser interactions. The visitor sends an enquiry from their email application. There is no business API, database, account system or server-side enquiry delivery in this repository.
+
+| Part          | Responsibility                                                                                                  |
+| ------------- | --------------------------------------------------------------------------------------------------------------- |
+| `app/`        | Page composition, layout, styles, metadata, sitemap, robots and missing-page handling                           |
+| `components/` | Navigation, service presentations, journey controls, showcase previews, themes, motion and contact interactions |
+| `data/`       | Structured service and capability content                                                                       |
+| `lib/`        | Shared site identity and navigation                                                                             |
+| `public/`     | Brand assets and static-host header configuration                                                               |
+| `scripts/`    | Local static preview and Lighthouse audit                                                                       |
+| `tests/`      | Browser interaction and accessibility coverage                                                                  |
+
+Local and CI builds use `output: "export"` in `next.config.ts` and generate the static site in `out/`. Images are configured as unoptimized for static hosting.
+
+Hostinger's Next.js preset overrides the output setting with standalone server mode and uses `.next/` instead. That hosted server mode does not add a business backend, database or authentication features to this application.
 
 ---
 
@@ -127,25 +220,21 @@ Dependencies are pinned in `package.json`, and `package-lock.json` supports repr
 
 ---
 
-## Architecture Overview
+## Prerequisites
 
-| Part          | Responsibility                                                                                                  |
-| ------------- | --------------------------------------------------------------------------------------------------------------- |
-| `app/`        | Page composition, layout, styles, metadata, sitemap, robots and missing-page handling                           |
-| `components/` | Navigation, service presentations, journey controls, showcase previews, themes, motion and contact interactions |
-| `data/`       | Structured service and capability content                                                                       |
-| `lib/`        | Shared site identity and navigation                                                                             |
-| `public/`     | Brand assets and static-host header configuration                                                               |
-| `scripts/`    | Local static preview and Lighthouse audit                                                                       |
-| `tests/`      | Browser interaction and accessibility coverage                                                                  |
+Install Git, Node.js 24 and the npm version supplied with Node.js. `.nvmrc` selects Node.js 24 for local development and CI.
 
-Local and CI builds use `output: "export"` in `next.config.ts` and generate the static site in `out/`. Images are configured as unoptimized for static hosting.
+```sh
+git --version
+node --version
+npm --version
+```
 
-Hostinger's Next.js preset overrides the output setting with standalone server mode and uses `.next/` instead. That hosted server mode does not add a business backend, database or authentication features to this application.
+Use PowerShell on Windows or a POSIX shell on macOS/Linux. A database or backend service is not required.
 
 ---
 
-## Main Folder Structure
+## Repository Structure
 
 | Path                               | Contents                                              |
 | ---------------------------------- | ----------------------------------------------------- |
@@ -170,13 +259,9 @@ Hostinger's Next.js preset overrides the output setting with standalone server m
 
 ---
 
-## How to Run Locally
+## Quick Installation
 
-### 1. Prerequisites
-
-Use Node.js 24, npm and Git. Node.js 24 is selected in `.nvmrc` for local development and CI.
-
-### 2. Clone and Install
+### 1. Clone and Install
 
 ```sh
 git clone https://github.com/rizad-mohamed/Quentagon.git
@@ -184,7 +269,7 @@ cd Quentagon
 npm ci
 ```
 
-### 3. Configure the Public Origin
+### 2. Configure the Public Origin
 
 Copy `.env.example` to `.env.local`.
 
@@ -206,7 +291,7 @@ For a build intended for the live domain, set:
 NEXT_PUBLIC_SITE_URL=https://quentagon.com
 ```
 
-### 4. Start Development
+### 3. Start Development
 
 ```sh
 npm run dev
@@ -214,7 +299,7 @@ npm run dev
 
 Open [http://127.0.0.1:3000](http://127.0.0.1:3000).
 
-### 5. Preview a Production Export
+### 4. Preview a Production Export
 
 ```sh
 npm run build
@@ -225,7 +310,7 @@ Open [http://127.0.0.1:3003](http://127.0.0.1:3003). The preview server binds to
 
 ---
 
-## Environment Variables
+## Environment Configuration
 
 | Variable               | Purpose                                                                                                                                                                                                                          |
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -254,7 +339,7 @@ No credentials are required to run the frontend. `NEXT_PUBLIC_` variables are pu
 
 ---
 
-## Testing Summary
+## Testing and Release Verification
 
 The repository includes browser tests in `tests/site.spec.ts` and `tests/theme-motion.spec.ts`, using Playwright and axe-core. There is no separate unit-test suite.
 
@@ -325,6 +410,30 @@ The header file is not proof that Hostinger applies those headers to its Node.js
 
 ---
 
+## Troubleshooting
+
+### Hostinger reports a missing output directory
+
+Use `.next` with Hostinger's Next.js preset. That preset builds a standalone server, while the repository's local and CI configuration exports `out/`. Selecting `out` for the preset produces the wrong output-directory expectation.
+
+### The live website does not reflect a merge
+
+Confirm which repository and branch Hostinger is connected to. A merge in `rizad-mohamed/Quentagon` does not update the separate `M-K-Hirusha/Quentagon` deployment copy. Bring the reviewed changes into the connected branch, deploy and check the build status.
+
+### Contact does not send an email automatically
+
+The form opens a `mailto:` draft. Configure an email application or use the displayed email address directly. The visitor must send the message; this repository has no submission API or delivery queue.
+
+### Browser tests cannot open the local preview
+
+Run `npm run build` first, then install Chromium with `npx playwright install chromium`. With no `PLAYWRIGHT_BASE_URL` override, Playwright starts the local static server on port 3003. If an override is set, the target server must already be running.
+
+### Metadata still points to the earlier preview domain
+
+Set `NEXT_PUBLIC_SITE_URL=https://quentagon.com` in the relevant build environment, then rebuild and redeploy. Changing a build-time variable does not rewrite an existing build.
+
+---
+
 ## Development Workflow
 
 1. Pull the latest `main` and create a focused topic branch.
@@ -338,13 +447,26 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full contribution guidance. Prese
 
 ---
 
-## Security Notes
+## Security Rules
 
 - Keep real environment values and hosting credentials out of Git.
 - Public build variables must not contain secrets.
 - The contact form opens a local email draft; it does not store enquiry data in a database.
 - Review production hosting headers and settings separately from local static-preview behavior.
 - Report suspected vulnerabilities privately using the contact in [SECURITY.md](SECURITY.md).
+
+---
+
+## Project Documentation
+
+| File                                                 | Purpose                                                   |
+| ---------------------------------------------------- | --------------------------------------------------------- |
+| [CONTRIBUTING.md](CONTRIBUTING.md)                   | Branches, validation, pull requests and attribution       |
+| [SECURITY.md](SECURITY.md)                           | Private vulnerability reporting and security expectations |
+| [.env.example](.env.example)                         | Safe public-origin configuration example                  |
+| [.github/workflows/ci.yml](.github/workflows/ci.yml) | CI validation and static artifact packaging               |
+| [next.config.ts](next.config.ts)                     | Local and CI static-export configuration                  |
+| [playwright.config.ts](playwright.config.ts)         | Browser-test target and local preview configuration       |
 
 ---
 
@@ -373,7 +495,9 @@ Potential improvements, subject to maintainer agreement:
 
 ---
 
-## Author and Project Information
+## Project Background
+
+Quentagon presents software, design and technical delivery for prospective business clients. The live About section introduces **Rizad Mohamed** and **Hirusha Nilupul** as co-founders. This website was developed by Rizad Mohamed; repository history preserves contributor attribution.
 
 | Item                       | Details                                                                                    |
 | -------------------------- | ------------------------------------------------------------------------------------------ |
@@ -399,6 +523,6 @@ git clone https://github.com/rizad-mohamed/Quentagon.git
 
 ---
 
-## License
+## License and Use
 
 No license has been selected in this repository. Contact the maintainer before assuming permission to redistribute the code or brand assets. Package metadata does not grant a license or imply a release.
